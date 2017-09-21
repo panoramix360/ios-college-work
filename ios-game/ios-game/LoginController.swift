@@ -24,11 +24,11 @@ class LoginController: UIViewController, GIDSignInUIDelegate {
         GIDSignIn.sharedInstance().signIn()
         
         // testing FirebaseDatabase
-        /*let ref = Database.database().reference(withPath: "games")
+        let ref = Database.database().reference(withPath: "games")
         
         ref.observe(.value, with: {
             snapshot in print(snapshot.value!)
-        })*/
+        })
         // Do any additional setup after loading the view, typically from a nib.
     }
     
