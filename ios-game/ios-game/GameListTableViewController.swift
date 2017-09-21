@@ -25,17 +25,14 @@ class GameListTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
 
         ref.observe(.value, with: { snapshot in
-            for item in snapshot.children {
-                //item
-                /*if item child("userChallenging") && item.child("userRequesting") {
-                    let gameItem = Game(id: 1, name: "teste", numberOfPlayers: "1")
-                } else {
-                    let gameItem = Game(id: 1, name: "teste", numberOfPlayers: "1")
-                }*/
+            if snapshot.childrenCount > 0 {
                 
-                let gameItem = Game(uid: 1, name: "Nome do Jogo", numberOfPlayers: "1")
+                self.games.removeAll()
                 
-                self.games.append(gameItem!)
+                for item in snapshot.children {
+                    let gameItem = Game(snapshot: item as! DataSnapshot)
+                    self.games.append(gameItem)
+                }
             }
             
             self.tableView.reloadData()
@@ -73,6 +70,35 @@ class GameListTableViewController: UITableViewController {
 
         return cell
     }
+
+    
+    @IBAction func addNewGame(_ sender: Any) {
+        let alert = UIAlertController(title: "Adicionar Novo Jogo",
+                                      message: "",
+                                      preferredStyle: .alert)
+        
+        let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
+            
+            guard let textField = alert.textFields?.first,
+                let text = textField.text else { return }
+            
+            let id = self.ref.childByAutoId().key
+            
+            let game = Game(id: id, name: text, userRequesting: "teste");
+            
+            self.ref.setValue(game?.toAnyObject())
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancelar", style: .default)
+        
+        alert.addTextField()
+        
+        alert.addAction(saveAction)
+        alert.addAction(cancelAction)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
 
     /*
     // Override to support conditional editing of the table view.

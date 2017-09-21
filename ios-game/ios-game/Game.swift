@@ -7,20 +7,40 @@
 //
 
 import Foundation
+import FirebaseDatabase
 
 class Game {
     
-    var uid: Int
+    var id: String
     var name: String
-    var numberOfPlayers: String
+    var userRequesting: String
     
-    init?(uid: Int, name: String, numberOfPlayers: String) {
-        if uid < 0 || name.isEmpty || numberOfPlayers.isEmpty {
+    var userChallenging: String = ""
+    var numberOfPlayers: String = ""
+    
+    init?(id: String, name: String, userRequesting: String) {
+        if id.isEmpty || name.isEmpty || userRequesting.isEmpty {
             return nil
         }
         
-        self.uid = uid
+        self.id = id
         self.name = name
-        self.numberOfPlayers = numberOfPlayers
+        self.userRequesting = userRequesting
+    }
+    
+    init(snapshot: DataSnapshot) {
+        self.id = snapshot.key
+        let snapshotValue = snapshot.value as! [String: AnyObject]
+        self.name = snapshotValue["name"] as! String
+        self.userRequesting = snapshotValue["userRequesting"] as! String
+        self.userChallenging = snapshotValue["userChallenging"] as! String
+    }
+    
+    func toAnyObject() -> Any {
+        return [
+            "id": self.id,
+            "name": self.name,
+            "userRequesting": self.userRequesting
+        ]
     }
 }
