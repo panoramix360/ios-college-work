@@ -46,8 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
                 return
             }
             
-            
-            
+            self.window?.rootViewController?.performSegue(withIdentifier: "loginToListSegue", sender: Any?)
         })
     }
     
