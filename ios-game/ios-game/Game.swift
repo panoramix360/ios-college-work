@@ -14,9 +14,7 @@ class Game {
     var id: String
     var name: String
     var userRequesting: String
-    
     var userChallenging: String = ""
-    var numberOfPlayers: String = ""
     
     init?(id: String, name: String, userRequesting: String) {
         if id.isEmpty || name.isEmpty || userRequesting.isEmpty {
@@ -33,7 +31,10 @@ class Game {
         let snapshotValue = snapshot.value as! [String: AnyObject]
         self.name = snapshotValue["name"] as! String
         self.userRequesting = snapshotValue["userRequesting"] as! String
-        self.userChallenging = snapshotValue["userChallenging"] as! String
+        guard let userChallenging = snapshotValue["userChallenging"] else {
+            return
+        }
+        self.userChallenging = userChallenging as! String
     }
     
     func toAnyObject() -> Any {

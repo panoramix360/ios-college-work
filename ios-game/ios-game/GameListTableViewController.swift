@@ -24,7 +24,7 @@ class GameListTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
 
-        ref.observe(.value, with: { snapshot in
+        self.ref.observe(.value, with: { snapshot in
             if snapshot.childrenCount > 0 {
                 
                 self.games.removeAll()
@@ -66,7 +66,8 @@ class GameListTableViewController: UITableViewController {
         let game = games[indexPath.row]
         
         cell.gameName.text = game.name
-        cell.gamePlayers.text = "Jogadores: " + game.numberOfPlayers
+        cell.userRequesting.text = cell.userRequesting.text! + game.userRequesting
+        cell.userChallenging.text = cell.userChallenging.text! + game.userChallenging
 
         return cell
     }
@@ -84,9 +85,9 @@ class GameListTableViewController: UITableViewController {
             
             let id = self.ref.childByAutoId().key
             
-            let game = Game(id: id, name: text, userRequesting: "teste");
+            let game = Game(id: id, name: text, userRequesting: "sdss");
             
-            self.ref.setValue(game?.toAnyObject())
+            self.ref.child(id).setValue(game?.toAnyObject())
         }
         
         let cancelAction = UIAlertAction(title: "Cancelar", style: .default)

@@ -11,7 +11,8 @@ import UIKit
 class GameTableViewCell: UITableViewCell {
     
     @IBOutlet weak var gameName: UILabel!
-    @IBOutlet weak var gamePlayers: UILabel!
+    @IBOutlet weak var userRequesting: UILabel!
+    @IBOutlet weak var userChallenging: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
