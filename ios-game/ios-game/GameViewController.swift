@@ -20,8 +20,8 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         self.gameName.text = game?.name
-        self.userRequesting.text = game?.userRequesting
-        self.userChallenging.text = self.userChallenging.text + game?.userChallenging
+        self.userRequesting.text = self.userRequesting.text! + (game?.userRequesting)!
+        self.userChallenging.text = self.userRequesting.text! + (game?.userChallenging)!
         // Do any additional setup after loading the view.
     }
 
