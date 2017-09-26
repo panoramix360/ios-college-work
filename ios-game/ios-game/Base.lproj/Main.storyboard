@@ -92,15 +92,6 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fbs-Jo-PJU">
-                                            <rect key="frame" x="320" y="29" width="47" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <state key="normal" title="Entrar"/>
-                                            <connections>
-                                                <action selector="enterGame:" destination="kez-CU-6SZ" eventType="touchUpInside" id="uty-rF-dtL"/>
-                                                <segue destination="f38-OA-BFK" kind="show" identifier="listToDetailSegue" id="OEJ-hd-SIQ"/>
-                                            </connections>
-                                        </button>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
@@ -124,6 +115,9 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <segue destination="f38-OA-BFK" kind="show" identifier="listToDetailSegue" id="omI-Wn-aUT"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P32-hb-Y5D" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

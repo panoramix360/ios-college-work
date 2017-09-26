@@ -10,13 +10,18 @@ import UIKit
 
 class GameViewController: UIViewController {
 
+    var game: Game?
+    
     @IBOutlet weak var gameName: UILabel!
     @IBOutlet weak var userRequesting: UILabel!
     @IBOutlet weak var userChallenging: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        self.gameName.text = game?.name
+        self.userRequesting.text = game?.userRequesting
+        self.userChallenging.text = self.userChallenging.text + game?.userChallenging
         // Do any additional setup after loading the view.
     }
 

@@ -13,6 +13,7 @@ import FirebaseDatabase
 class GameListTableViewController: UITableViewController {
 
     var games = [Game]()
+    var selectedGame: Game?
     let ref = Database.database().reference(withPath: "games")
     
     override func viewDidLoad() {
@@ -100,6 +101,19 @@ class GameListTableViewController: UITableViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "listToDetailSegue" {
+            if let gameViewController = segue.destination as? GameViewController {
+                gameViewController.game = selectedGame
+            }
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.selectedGame = self.games[indexPath.row]
+        
+        self.performSegue(withIdentifier: "listToDetailSegue", sender: selectedGame)
+    }
 
     /*
     // Override to support conditional editing of the table view.

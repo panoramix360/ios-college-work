@@ -13,10 +13,6 @@ class GameTableViewCell: UITableViewCell {
     @IBOutlet weak var gameName: UILabel!
     @IBOutlet weak var userRequesting: UILabel!
     @IBOutlet weak var userChallenging: UILabel!
-    
-    @IBAction func enterGame(_ sender: Any) {
-        self.window?.rootViewController?.performSegue(withIdentifier: "listToDetailSegue", sender: Any?)
-    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
