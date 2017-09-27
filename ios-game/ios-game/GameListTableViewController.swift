@@ -115,9 +115,22 @@ class GameListTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.selectedGame = self.games[indexPath.row]
-        self.selectedGame?.userChallenging = (self.appDelegate.user?.displayName)!
-        self.performSegue(withIdentifier: "listToDetailSegue", sender: self.selectedGame)
+        
+        if self.selectedGame?.userChallenging == "" {
+            self.selectedGame?.userChallenging = (self.appDelegate.user?.displayName)!
+            self.performSegue(withIdentifier: "listToDetailSegue", sender: self.selectedGame)
+        } else {
+            let alert = UIAlertController(title: "Jogo cheio.",
+                                          message: "",
+                                          preferredStyle: .alert)
+            
+            let cancelAction = UIAlertAction(title: "Ok", style: .default)
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+        }
     }
+    
+    
 
     /*
     // Override to support conditional editing of the table view.
