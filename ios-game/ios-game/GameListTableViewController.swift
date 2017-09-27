@@ -16,6 +16,8 @@ class GameListTableViewController: UITableViewController {
     var selectedGame: Game?
     let gamesDb = Database.database().reference(withPath: "games")
     
+    let appDelegate: AppDelegate = UIApplication.shared.delegate as! AppDelegate
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,10 +28,9 @@ class GameListTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
 
         self.gamesDb.observe(.value, with: { snapshot in
+            self.games.removeAll()
+            
             if snapshot.childrenCount > 0 {
-                
-                self.games.removeAll()
-                
                 for item in snapshot.children {
                     let gameItem = Game(snapshot: item as! DataSnapshot)
                     self.games.append(gameItem)
@@ -67,8 +68,8 @@ class GameListTableViewController: UITableViewController {
         let game = games[indexPath.row]
         
         cell.gameName.text = game.name
-        cell.userRequesting.text = cell.userRequesting.text! + game.userRequesting
-        cell.userChallenging.text = cell.userChallenging.text! + game.userChallenging
+        cell.userRequesting.text = game.userRequesting
+        cell.userChallenging.text = game.userChallenging
 
         return cell
     }
@@ -86,9 +87,12 @@ class GameListTableViewController: UITableViewController {
             
             let id = self.gamesDb.childByAutoId().key
             
-            let game = Game(id: id, name: text, userRequesting: "sdss");
+            let game = Game(id: id, name: text, userRequesting: (self.appDelegate.user?.displayName)!);
             
             self.gamesDb.child(id).setValue(game?.toAnyObject())
+            
+            self.selectedGame = game
+            self.performSegue(withIdentifier: "listToDetailSegue", sender: self.selectedGame)
         }
         
         let cancelAction = UIAlertAction(title: "Cancelar", style: .default)
@@ -111,8 +115,8 @@ class GameListTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.selectedGame = self.games[indexPath.row]
-        
-        self.performSegue(withIdentifier: "listToDetailSegue", sender: selectedGame)
+        self.selectedGame?.userChallenging = (self.appDelegate.user?.displayName)!
+        self.performSegue(withIdentifier: "listToDetailSegue", sender: self.selectedGame)
     }
 
     /*

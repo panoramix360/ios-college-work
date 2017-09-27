@@ -41,7 +41,8 @@ class Game {
         return [
             "id": self.id,
             "name": self.name,
-            "userRequesting": self.userRequesting
+            "userRequesting": self.userRequesting,
+            "userChallenging": self.userChallenging
         ]
     }
 }
