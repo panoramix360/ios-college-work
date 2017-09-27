@@ -59,6 +59,7 @@ class GameViewController: UIViewController {
                 self.userRequesting.text = (self.game?.userRequesting)!
                 self.userChallenging.text = (self.game?.userChallenging)!
             } else {
+                self.game = nil
                 self.navigationController?.popViewController(animated: true)
             }
         })
@@ -70,11 +71,13 @@ class GameViewController: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        if self.game?.userRequesting == self.appDelegate.user?.displayName {
-            self.gamesDb.child(self.game?.id as! String).removeValue()
-        } else {
-            self.game?.userChallenging = ""
-            self.updateGame()
+        if self.game != nil {
+            if self.game?.userRequesting == self.appDelegate.user?.displayName {
+                self.gamesDb.child(self.game?.id as! String).removeValue()
+            } else {
+                self.game?.userChallenging = ""
+                self.updateGame()
+            }
         }
     }
     
