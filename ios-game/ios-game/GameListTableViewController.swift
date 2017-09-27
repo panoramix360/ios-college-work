@@ -14,7 +14,7 @@ class GameListTableViewController: UITableViewController {
 
     var games = [Game]()
     var selectedGame: Game?
-    let ref = Database.database().reference(withPath: "games")
+    let gamesDb = Database.database().reference(withPath: "games")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +25,7 @@ class GameListTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
 
-        self.ref.observe(.value, with: { snapshot in
+        self.gamesDb.observe(.value, with: { snapshot in
             if snapshot.childrenCount > 0 {
                 
                 self.games.removeAll()
@@ -84,11 +84,11 @@ class GameListTableViewController: UITableViewController {
             guard let textField = alert.textFields?.first,
                 let text = textField.text else { return }
             
-            let id = self.ref.childByAutoId().key
+            let id = self.gamesDb.childByAutoId().key
             
             let game = Game(id: id, name: text, userRequesting: "sdss");
             
-            self.ref.child(id).setValue(game?.toAnyObject())
+            self.gamesDb.child(id).setValue(game?.toAnyObject())
         }
         
         let cancelAction = UIAlertAction(title: "Cancelar", style: .default)

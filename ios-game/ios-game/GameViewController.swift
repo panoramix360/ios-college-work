@@ -7,9 +7,13 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
 class GameViewController: UIViewController {
 
+    let gamesDb = Database.database().reference(withPath: "games")
+    let cardsDb = Database.database().reference(withPath: "cards")
+    
     var game: Game?
     
     @IBOutlet weak var gameName: UILabel!
@@ -23,6 +27,14 @@ class GameViewController: UIViewController {
         self.userRequesting.text = self.userRequesting.text! + (game?.userRequesting)!
         self.userChallenging.text = self.userRequesting.text! + (game?.userChallenging)!
         // Do any additional setup after loading the view.
+        
+        self.cardsDb.observe(.value, with: { snapshot in
+            if snapshot.childrenCount > 0 {
+                for item in snapshot.children {
+                    print(item as! DataSnapshot)
+                }
+            }
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -30,15 +42,19 @@ class GameViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    override func viewWillDisappear(_ animated: Bool) {
+        self.removeGame()
+    }
+    
+    func removeGame() {
+        self.gamesDb.child(game?.id as! String).removeValue()
+    }
+    
     /*
-    // MARK: - Navigation
-
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        let test = "teste"
     }
-    */
+     */
 
 }
