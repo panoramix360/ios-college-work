@@ -31,7 +31,7 @@ class GameViewController: UIViewController {
         self.gameName.text = self.game?.name
         
         if self.game?.userChallenging != "" {
-            self.getAllCards()
+            self.getAllCards(game: self.game!)
         }
     
         self.observeCurrentGame()
@@ -50,16 +50,16 @@ class GameViewController: UIViewController {
                 self.game?.userChallenging = ""
                 self.game?.deckUserRequesting = []
                 self.game?.deckUserChallenging = []
-                self.updateGame()
+                self.updateGame(game: self.game!)
             }
         }
     }
     
-    func updateGame() {
-        self.gamesDb.child((self.game?.id)!).updateChildValues(self.game?.toAnyObject() as! [AnyHashable : Any])
+    func updateGame(game: Game) {
+        self.gamesDb.child((game.id)).updateChildValues(game.toAnyObject() as! [AnyHashable : Any])
     }
     
-    func getAllCards() {
+    func getAllCards(game: Game) {
         // preenchendo todas as cartas
         self.cardsDb.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.childrenCount > 0 {
@@ -69,8 +69,8 @@ class GameViewController: UIViewController {
                     self.allCards.append(cardItem)
                 }
                 
-                self.drawCardsForPlayers()
-                self.updateGame()
+                self.drawCardsForPlayers(game: game)
+                self.updateGame(game: game)
             }
         })
     }
@@ -96,16 +96,16 @@ class GameViewController: UIViewController {
         })
     }
     
-    func drawCardsForPlayers() {
+    func drawCardsForPlayers(game: Game) {
         let cardsPerPlayer: Int = self.allCards.count / 2
         
         self.allCards.shuffle()
         
         for index in 0...self.allCards.count - 1 {
             if index < cardsPerPlayer {
-                self.game?.deckUserRequesting.append(self.allCards[index])
+                game.deckUserRequesting.append(self.allCards[index])
             } else {
-                self.game?.deckUserChallenging.append(self.allCards[index])
+                game.deckUserChallenging.append(self.allCards[index])
             }
         }
     }
