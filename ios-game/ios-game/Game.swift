@@ -16,6 +16,12 @@ class Game {
     var userRequesting: String
     var userChallenging: String = ""
     
+    var scoreUserRequesting: Int = 0
+    var scoreUserChallenging: Int = 0
+    
+    var round: Int = 0
+    var roundUser: Int = 0
+    
     var deckUserRequesting = [Card]()
     var deckUserChallenging = [Card]()
     
@@ -46,6 +52,10 @@ class Game {
             "name": self.name,
             "userRequesting": self.userRequesting,
             "userChallenging": self.userChallenging,
+            "scoreUserRequesting": self.scoreUserRequesting,
+            "scoreUserChallenging": self.scoreUserChallenging,
+            "round": self.round,
+            "roundUser": self.roundUser,
             "deckUserRequesting": self.toAnyArrayObject(cards: self.deckUserRequesting),
             "deckUserChallenging": self.toAnyArrayObject(cards: self.deckUserChallenging)
         ]

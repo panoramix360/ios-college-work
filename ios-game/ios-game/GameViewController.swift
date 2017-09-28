@@ -70,6 +70,7 @@ class GameViewController: UIViewController {
                 }
                 
                 self.drawCardsForPlayers(game: game)
+                self.sortFirstPlayer(game: game)
                 self.updateGame(game: game)
             }
         })
@@ -110,7 +111,9 @@ class GameViewController: UIViewController {
         }
     }
     
-    
+    func sortFirstPlayer(game: Game) {
+        game.roundUser = arc4random_uniform(1) as! Int
+    }
     
     /*
     // In a storyboard-based application, you will often want to do a little preparation before navigation
