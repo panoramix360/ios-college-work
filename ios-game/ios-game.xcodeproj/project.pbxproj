@@ -22,6 +22,7 @@
 		B04563A91F735AF100D02B40 /* GameTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04563A81F735AF100D02B40 /* GameTableViewCell.swift */; };
 		B04563AC1F7361D700D02B40 /* GameListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04563AB1F7361D700D02B40 /* GameListTableViewController.swift */; };
 		B04563AE1F73631200D02B40 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04563AD1F73631200D02B40 /* Game.swift */; };
+		B088C3E91F7C851C0092AE7F /* ShuffleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B088C3E81F7C851C0092AE7F /* ShuffleExtension.swift */; };
 		B08BC6D51F70B10100A6EA1D /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08BC6D41F70B10100A6EA1D /* LoginController.swift */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +58,7 @@
 		B04563A81F735AF100D02B40 /* GameTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTableViewCell.swift; sourceTree = "<group>"; };
 		B04563AB1F7361D700D02B40 /* GameListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameListTableViewController.swift; sourceTree = "<group>"; };
 		B04563AD1F73631200D02B40 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		B088C3E81F7C851C0092AE7F /* ShuffleExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuffleExtension.swift; sourceTree = "<group>"; };
 		B08BC6D41F70B10100A6EA1D /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		BD7D9E47C955596D85E24032 /* Pods-ios-gameTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios-gameTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ios-gameTests/Pods-ios-gameTests.release.xcconfig"; sourceTree = "<group>"; };
 		CF84C4851CF4A49D847A86C8 /* Pods-ios-game.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ios-game.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ios-game/Pods-ios-game.debug.xcconfig"; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				B04563AB1F7361D700D02B40 /* GameListTableViewController.swift */,
 				B04563A81F735AF100D02B40 /* GameTableViewCell.swift */,
 				B022A2FC1F7887AA00FA7BA6 /* GameViewController.swift */,
+				B088C3E81F7C851C0092AE7F /* ShuffleExtension.swift */,
 				B00903F21F7099E10086F2B2 /* Main.storyboard */,
 				B00903F81F7099E10086F2B2 /* Assets.xcassets */,
 				B00903FA1F7099E20086F2B2 /* LaunchScreen.storyboard */,
@@ -380,6 +383,7 @@
 				B04563A91F735AF100D02B40 /* GameTableViewCell.swift in Sources */,
 				B04563AE1F73631200D02B40 /* Game.swift in Sources */,
 				B08BC6D51F70B10100A6EA1D /* LoginController.swift in Sources */,
+				B088C3E91F7C851C0092AE7F /* ShuffleExtension.swift in Sources */,
 				B04563AC1F7361D700D02B40 /* GameListTableViewController.swift in Sources */,
 				B00903EF1F7099E10086F2B2 /* AppDelegate.swift in Sources */,
 				B00903F71F7099E10086F2B2 /* ios_game.xcdatamodeld in Sources */,
