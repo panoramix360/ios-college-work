@@ -16,6 +16,9 @@ class Game {
     var userRequesting: String
     var userChallenging: String = ""
     
+    var deckUserRequesting = [Card]()
+    var deckUserChallenging = [Card]()
+    
     init?(id: String, name: String, userRequesting: String) {
         if id.isEmpty || name.isEmpty || userRequesting.isEmpty {
             return nil
@@ -42,7 +45,17 @@ class Game {
             "id": self.id,
             "name": self.name,
             "userRequesting": self.userRequesting,
-            "userChallenging": self.userChallenging
+            "userChallenging": self.userChallenging,
+            "deckUserRequesting": self.toAnyArrayObject(cards: self.deckUserRequesting),
+            "deckUserChallenging": self.toAnyArrayObject(cards: self.deckUserChallenging)
         ]
+    }
+    
+    func toAnyArrayObject(cards: [Card]) -> NSArray {
+        let arr: NSMutableArray = NSMutableArray()
+        for card in cards {
+            arr.add(card.toAnyObject())
+        }
+        return arr
     }
 }

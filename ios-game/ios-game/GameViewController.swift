@@ -19,9 +19,6 @@ class GameViewController: UIViewController {
     var allCards = [Card]()
     var game: Game?
     
-    var deckUserRequesting = [Card]()
-    var deckUserChallenging = [Card]()
-    
     @IBOutlet weak var gameName: UILabel!
     @IBOutlet weak var userRequesting: UILabel!
     @IBOutlet weak var userChallenging: UILabel!
@@ -33,10 +30,13 @@ class GameViewController: UIViewController {
         
         self.gameName.text = self.game?.name
         
-        self.updateGame()
-        
-        self.getAllCards()
-        self.getCurrentGame()
+        if self.game?.userChallenging != "" {
+            self.getAllCards()
+            self.drawCardsForPlayers()
+            self.updateGame()
+        }
+    
+        self.observeCurrentGame()
     }
 
     override func didReceiveMemoryWarning() {
@@ -68,20 +68,17 @@ class GameViewController: UIViewController {
                     let cardItem = Card(snapshot: item as! DataSnapshot)
                     self.allCards.append(cardItem)
                 }
-                
-                
             }
         })
     }
     
-    func getCurrentGame() {
+    func observeCurrentGame() {
         // observer do jogo para ver se alguem entrou
         self.gamesDb.child(self.game?.id as! String).observe(.value, with: { snapshot in
             if snapshot.childrenCount > 0 {
                 let gameItem = Game(snapshot: snapshot as! DataSnapshot)
                 if self.game?.userChallenging == "" && gameItem.userChallenging != "" {
                     self.gameStatus.text = "Jogo irá começar..."
-                    self.drawCardsForPlayers()
                 } else if self.game?.userChallenging != "" && gameItem.userChallenging == "" {
                     self.gameStatus.text = "Desafiante saiu da sala..."
                 }
@@ -103,23 +100,16 @@ class GameViewController: UIViewController {
         
         for index in 0...self.allCards.count - 1 {
             if index < cardsPerPlayer {
-                self.deckUserRequesting.append(self.allCards[index])
+                self.game?.deckUserRequesting.append(self.allCards[index])
             } else {
-                self.deckUserChallenging.append(self.allCards[index])
+                self.game?.deckUserChallenging.append(self.allCards[index])
             }
         }
         
-        self.gamesDb.child((self.game?.id)!).child("deckUserRequesting").setValue(self.toAnyArrayObject(cards: self.deckUserRequesting))
-        self.gamesDb.child((self.game?.id)!).child("deckUserChallenging").setValue(self.toAnyArrayObject(cards: self.deckUserChallenging))
+        self.updateGame()
     }
     
-    func toAnyArrayObject(cards: [Card]) -> NSArray {
-        let arr: NSMutableArray = NSMutableArray()
-        for card in cards {
-            arr.add(card.toAnyObject())
-        }
-        return arr
-    }
+    
     
     /*
     // In a storyboard-based application, you will often want to do a little preparation before navigation
