@@ -32,8 +32,6 @@ class GameViewController: UIViewController {
         
         if self.game?.userChallenging != "" {
             self.getAllCards()
-            self.drawCardsForPlayers()
-            self.updateGame()
         }
     
         self.observeCurrentGame()
@@ -50,6 +48,8 @@ class GameViewController: UIViewController {
                 self.gamesDb.child(self.game?.id as! String).removeValue()
             } else {
                 self.game?.userChallenging = ""
+                self.game?.deckUserRequesting = []
+                self.game?.deckUserChallenging = []
                 self.updateGame()
             }
         }
@@ -61,13 +61,16 @@ class GameViewController: UIViewController {
     
     func getAllCards() {
         // preenchendo todas as cartas
-        self.cardsDb.observe(.value, with: { snapshot in
+        self.cardsDb.observeSingleEvent(of: .value, with: { (snapshot) in
             if snapshot.childrenCount > 0 {
                 self.allCards.removeAll()
                 for item in snapshot.children {
                     let cardItem = Card(snapshot: item as! DataSnapshot)
                     self.allCards.append(cardItem)
                 }
+                
+                self.drawCardsForPlayers()
+                self.updateGame()
             }
         })
     }
@@ -105,8 +108,6 @@ class GameViewController: UIViewController {
                 self.game?.deckUserChallenging.append(self.allCards[index])
             }
         }
-        
-        self.updateGame()
     }
     
     
