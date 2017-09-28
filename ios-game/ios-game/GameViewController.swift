@@ -16,20 +16,18 @@ class GameViewController: UIViewController {
     let gamesDb = Database.database().reference(withPath: "games")
     let cardsDb = Database.database().reference(withPath: "cards")
     
-    
-    
     var allCards = [Card]()
     var game: Game?
     
-    @IBOutlet weak var gameName: UILabel!
-    @IBOutlet weak var userRequesting: UILabel!
-    @IBOutlet weak var userChallenging: UILabel!
+    @IBOutlet weak var myName: UILabel!
+    @IBOutlet weak var opponentName: UILabel!
+    
     @IBOutlet weak var round: UILabel!
     @IBOutlet weak var scoreUserRequesting: UILabel!
     @IBOutlet weak var scoreUserChallenging: UILabel!
     
-    @IBOutlet weak var userRequestingImageCard: UIImageView!
-    @IBOutlet weak var userChallengingImageCard: UIImageView!
+    @IBOutlet weak var myImageCard: UIImageView!
+    @IBOutlet weak var opponentImageCard: UIImageView!
     
     @IBOutlet weak var gameStatus: UILabel!
     
@@ -68,9 +66,14 @@ class GameViewController: UIViewController {
     }
     
     func updateGameOutlets(game: Game) {
-        self.userRequesting.text = (game.userRequesting)
-        self.userChallenging.text = (game.userChallenging)
-        self.round.text = String(game.round)
+        if game.userRequesting == self.appDelegate.user?.displayName {
+            self.myName.text = (game.userRequesting)
+            self.opponentName.text = (game.userChallenging)
+        } else {
+            self.myName.text = (game.userChallenging)
+            self.opponentName.text = (game.userRequesting)
+        }
+        self.round.text = String(game.round + 1)
         self.scoreUserRequesting.text = String(game.scoreUserRequesting)
         self.scoreUserChallenging.text = String(game.scoreUserChallenging)
     }
@@ -88,6 +91,7 @@ class GameViewController: UIViewController {
                 self.drawCardsForPlayers(game: game)
                 self.sortFirstPlayer(game: game)
                 self.updateGame(game: game)
+                self.startGame(game: game)
             }
         })
     }
@@ -99,7 +103,9 @@ class GameViewController: UIViewController {
                 let gameItem = Game(snapshot: snapshot as! DataSnapshot)
                 if self.game?.userChallenging == "" && gameItem.userChallenging != "" {
                     self.gameStatus.text = "Jogo irá começar..."
-                    self.startGame()
+                    if gameItem.userChallenging != self.appDelegate.user?.displayName {
+                        self.startGame(game: gameItem)
+                    }
                 } else if self.game?.userChallenging != "" && gameItem.userChallenging == "" {
                     self.gameStatus.text = "Desafiante saiu da sala..."
                 }
@@ -128,28 +134,36 @@ class GameViewController: UIViewController {
     }
     
     func sortFirstPlayer(game: Game) {
-        game.roundUser = Int(arc4random_uniform(1))
+        game.roundUser = Int(arc4random_uniform(2))
     }
     
-    func startGame() {
-        loadImage(imageUrlString: Constants.urlBlankCard, view: self.userRequestingImageCard)
-        loadImage(imageUrlString: Constants.urlBlankCard, view: self.userChallengingImageCard)
+    func startGame(game: Game) {
+        if game.userRequesting == self.appDelegate.user?.displayName {
+            self.myName.text = (game.userRequesting)
+            self.opponentName.text = (game.userChallenging)
+            loadImage(imageUrlString: (game.deckUserRequesting[game.round].imageUrl), view: self.myImageCard)
+            loadImage(imageUrlString: Constants.urlBlankCard, view: self.opponentImageCard)
+        } else {
+            self.myName.text = (game.userChallenging)
+            self.opponentName.text = (game.userRequesting)
+            loadImage(imageUrlString: (game.deckUserChallenging[game.round].imageUrl), view: self.myImageCard)
+            loadImage(imageUrlString: Constants.urlBlankCard, view: self.opponentImageCard)
+        }
     }
     
     func loadImage(imageUrlString: String, view: UIImageView) {
         let url = URL(string: imageUrlString)
         
         let task = URLSession.shared.dataTask(with: url!) {responseData,response,error in
-            if error == nil{
+            if error == nil {
                 if let data = responseData {
-                    
                     DispatchQueue.main.async {
                         view.image = UIImage(data: data)
                     }
-                }else {
+                } else {
                     print("no data")
                 }
-            }else{
+            } else {
                 print(error)
             }
         }
