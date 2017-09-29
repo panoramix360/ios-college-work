@@ -18,10 +18,10 @@ class Card {
     var name: String
     var speed: Int
     var strength: Int
-    var imageUrl: String
+    var url: String
     
-    init?(id: String, ability: Int, equipment: Int, intelligence: Int, name: String, speed: Int, strength: Int, imageUrl: String) {
-        if id.isEmpty || name.isEmpty || imageUrl.isEmpty {
+    init?(id: String, ability: Int, equipment: Int, intelligence: Int, name: String, speed: Int, strength: Int, url: String) {
+        if id.isEmpty || name.isEmpty || url.isEmpty {
             return nil
         }
         
@@ -32,7 +32,7 @@ class Card {
         self.name = name
         self.speed = speed
         self.strength = strength
-        self.imageUrl = imageUrl
+        self.url = url
     }
     
     init(snapshot: DataSnapshot) {
@@ -44,7 +44,18 @@ class Card {
         self.name = snapshotValue["name"] as! String
         self.speed = snapshotValue["speed"] as! Int
         self.strength = snapshotValue["strength"] as! Int
-        self.imageUrl = snapshotValue["url"] as! String
+        self.url = snapshotValue["url"] as! String
+    }
+    
+    init(dict: NSDictionary) {
+        self.id = dict["id"] as! String
+        self.ability = dict["ability"] as! Int
+        self.equipment = dict["equipment"] as! Int
+        self.intelligence = dict["intelligence"] as! Int
+        self.name = dict["name"] as! String
+        self.speed = dict["speed"] as! Int
+        self.strength = dict["strength"] as! Int
+        self.url = dict["url"] as! String
     }
     
     func toAnyObject() -> Any {
@@ -56,7 +67,7 @@ class Card {
             "name": self.name,
             "speed": self.speed,
             "strength": self.strength,
-            "imageUrl": self.imageUrl
+            "url": self.url
         ]
     }
 }

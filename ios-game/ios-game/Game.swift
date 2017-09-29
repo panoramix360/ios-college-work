@@ -25,6 +25,8 @@ class Game {
     var deckUserRequesting = [Card]()
     var deckUserChallenging = [Card]()
     
+    var opponentHasPlayed: Bool = false
+    
     init?(id: String, name: String, userRequesting: String) {
         if id.isEmpty || name.isEmpty || userRequesting.isEmpty {
             return nil
@@ -47,11 +49,18 @@ class Game {
         self.scoreUserChallenging = snapshotValue["scoreUserChallenging"] as! Int
         self.round = snapshotValue["round"] as! Int
         self.roundUser = snapshotValue["roundUser"] as! Int
+        self.opponentHasPlayed = snapshotValue["opponentHasPlayed"] as! Bool
+        
         if let deckUserRequesting = snapshotValue["deckUserRequesting"] {
-            self.deckUserRequesting = (deckUserRequesting as? [Card])!
+            for item in deckUserRequesting as! NSArray {
+                self.deckUserRequesting.append(Card(dict: item as! NSDictionary))
+            }
         }
+        
         if let deckUserChallenging = snapshotValue["deckUserChallenging"] {
-            self.deckUserChallenging = (deckUserChallenging as? [Card])!
+            for item in deckUserChallenging as! NSArray {
+                self.deckUserChallenging.append(Card(dict: item as! NSDictionary))
+            }
         }
     }
     
@@ -65,6 +74,7 @@ class Game {
             "scoreUserChallenging": self.scoreUserChallenging,
             "round": self.round,
             "roundUser": self.roundUser,
+            "opponentHasPlayed": self.opponentHasPlayed,
             "deckUserRequesting": self.toAnyArrayObject(cards: self.deckUserRequesting),
             "deckUserChallenging": self.toAnyArrayObject(cards: self.deckUserChallenging)
         ]
