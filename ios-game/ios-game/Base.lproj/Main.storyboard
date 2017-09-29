@@ -210,26 +210,41 @@
                                 <rect key="frame" x="578" y="107" width="39" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Força"/>
+                                <connections>
+                                    <action selector="chooseStrenght:" destination="f38-OA-BFK" eventType="touchUpInside" id="1Vs-uM-0RO"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="guA-rH-yqT">
                                 <rect key="frame" x="578" y="145" width="38" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Veloc"/>
+                                <connections>
+                                    <action selector="chooseVelocity:" destination="f38-OA-BFK" eventType="touchUpInside" id="YOD-MZ-1xv"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ekI-OU-5QJ">
                                 <rect key="frame" x="580" y="190" width="35" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Habil"/>
+                                <connections>
+                                    <action selector="chooseHability:" destination="f38-OA-BFK" eventType="touchUpInside" id="tmR-o6-NFj"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cJi-Og-zPL">
                                 <rect key="frame" x="578" y="234" width="39" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Equip"/>
+                                <connections>
+                                    <action selector="chooseEquipament:" destination="f38-OA-BFK" eventType="touchUpInside" id="R9x-cM-pAH"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dN1-2D-QT1">
                                 <rect key="frame" x="576" y="282" width="42" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Intelig"/>
+                                <connections>
+                                    <action selector="chooseIntelligence:" destination="f38-OA-BFK" eventType="touchUpInside" id="mkv-55-85n"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="myName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v0q-pV-29D">
                                 <rect key="frame" x="293" y="68" width="273" height="26"/>
@@ -242,7 +257,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="equipamentBtn" destination="cJi-Og-zPL" id="fh8-ni-dgO"/>
                         <outlet property="gameStatus" destination="3mf-ZS-LxW" id="dyX-1K-fXd"/>
+                        <outlet property="habilityBtn" destination="ekI-OU-5QJ" id="m2T-Z8-U39"/>
+                        <outlet property="intelligenceBtn" destination="dN1-2D-QT1" id="Dbh-hA-0Wf"/>
                         <outlet property="myImageCard" destination="ffn-KI-jm2" id="BuU-yu-CsW"/>
                         <outlet property="myName" destination="v0q-pV-29D" id="q3Y-Ns-Zcj"/>
                         <outlet property="opponentImageCard" destination="FfU-YT-Mx4" id="kCj-d3-7V8"/>
@@ -250,6 +268,8 @@
                         <outlet property="round" destination="d0v-SY-yHw" id="XCr-SX-cVM"/>
                         <outlet property="scoreUserChallenging" destination="Iew-xt-9iz" id="X0W-tn-kEE"/>
                         <outlet property="scoreUserRequesting" destination="fdS-Gg-07w" id="IQ1-bx-6vl"/>
+                        <outlet property="strengthBtn" destination="TqZ-a3-pUH" id="HqK-yw-pRC"/>
+                        <outlet property="velocityBtn" destination="guA-rH-yqT" id="152-qI-au8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OLM-89-Nev" userLabel="First Responder" sceneMemberID="firstResponder"/>

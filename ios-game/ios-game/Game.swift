@@ -40,10 +40,19 @@ class Game {
         let snapshotValue = snapshot.value as! [String: AnyObject]
         self.name = snapshotValue["name"] as! String
         self.userRequesting = snapshotValue["userRequesting"] as! String
-        guard let userChallenging = snapshotValue["userChallenging"] else {
-            return
+        if let userChallenging = snapshotValue["userChallenging"] {
+            self.userChallenging = userChallenging as! String
         }
-        self.userChallenging = userChallenging as! String
+        self.scoreUserRequesting = snapshotValue["scoreUserRequesting"] as! Int
+        self.scoreUserChallenging = snapshotValue["scoreUserChallenging"] as! Int
+        self.round = snapshotValue["round"] as! Int
+        self.roundUser = snapshotValue["roundUser"] as! Int
+        if let deckUserRequesting = snapshotValue["deckUserRequesting"] {
+            self.deckUserRequesting = (deckUserRequesting as? [Card])!
+        }
+        if let deckUserChallenging = snapshotValue["deckUserChallenging"] {
+            self.deckUserChallenging = (deckUserChallenging as? [Card])!
+        }
     }
     
     func toAnyObject() -> Any {
