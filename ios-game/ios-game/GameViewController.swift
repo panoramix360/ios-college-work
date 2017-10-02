@@ -57,17 +57,7 @@ class GameViewController: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        if self.game != nil {
-            if self.game?.userRequesting == self.appDelegate.user?.displayName {
-                self.gamesDb.child(self.game?.id as! String).removeValue()
-            } else {
-                self.game?.userChallenging = ""
-                self.game?.deckUserRequesting = []
-                self.game?.deckUserChallenging = []
-                self.updateGame()
-                
-            }
-        }
+        self.exitGame()
     }
     
     func updateGame() {
@@ -99,6 +89,9 @@ class GameViewController: UIViewController {
                 
                 self.drawCardsForPlayers()
                 self.sortFirstPlayer()
+                self.game?.round = 0
+                self.game?.scoreUserChallenging = 0
+                self.game?.scoreUserRequesting = 0
                 self.updateGame()
                 self.startGame(game: self.game!)
                 self.observeCurrentGame()
@@ -127,7 +120,16 @@ class GameViewController: UIViewController {
                     } else {
                         self.loadImage(imageUrlString: (self.game?.deckUserRequesting[(self.game?.round)!].url)!, view: self.opponentImageCard)
                     }
+                    if (self.game?.scoreUserRequesting)! < gameItem.scoreUserRequesting {
+                        self.gameStatus.text = (self.game?.userRequesting)! + " ganhou!"
+                    } else if (self.game?.scoreUserChallenging)! < gameItem.scoreUserChallenging {
+                        self.gameStatus.text = (self.game?.userChallenging)! + " ganhou!"
+                    } else {
+                        self.gameStatus.text = "empate!"
+                    }
                     gameItem.opponentHasPlayed = false
+                } else if(self.game?.roundUser != gameItem.roundUser ) {
+                    self.startGame(game: gameItem)
                 }
                 
                 self.game = gameItem
@@ -158,19 +160,24 @@ class GameViewController: UIViewController {
     }
     
     func startGame(game: Game) {
-        if game.userRequesting == self.appDelegate.user?.displayName {
-            self.myName.text = (game.userRequesting)
-            self.opponentName.text = (game.userChallenging)
-            loadImage(imageUrlString: game.deckUserRequesting[game.round].url, view: self.myImageCard)
-            loadImage(imageUrlString: Constants.urlBlankCard, view: self.opponentImageCard)
-        } else {
-            self.myName.text = (game.userChallenging)
-            self.opponentName.text = (game.userRequesting)
-            loadImage(imageUrlString: game.deckUserChallenging[game.round].url, view: self.myImageCard)
-            loadImage(imageUrlString: Constants.urlBlankCard, view: self.opponentImageCard)
+        
+        let endGmae = checkEndGame(game: game)
+        if !endGmae {
+            if game.userRequesting == self.appDelegate.user?.displayName {
+                self.myName.text = (game.userRequesting)
+                self.opponentName.text = (game.userChallenging)
+                loadImage(imageUrlString: game.deckUserRequesting[game.round].url, view: self.myImageCard)
+                loadImage(imageUrlString: Constants.urlBlankCard, view: self.opponentImageCard)
+            } else {
+                self.myName.text = (game.userChallenging)
+                self.opponentName.text = (game.userRequesting)
+                loadImage(imageUrlString: game.deckUserChallenging[game.round].url, view: self.myImageCard)
+                loadImage(imageUrlString: Constants.urlBlankCard, view: self.opponentImageCard)
+            }
+            
+            showTurn(game: game)
         }
         
-        showTurn(game: game)
     }
     
     func showTurn(game: Game) {
@@ -240,34 +247,24 @@ class GameViewController: UIViewController {
         
         switch attribute {
             case AttributeEnum.strenght:
-                if cardUserRequesting.strength > cardUserChallenging.strength {
-                    self.game?.scoreUserRequesting += 1
-                    self.gameStatus.text = (self.game?.userRequesting)! + " ganhou!"
-                    self.game?.roundUser = 0
-                } else if cardUserRequesting.strength < cardUserChallenging.strength {
-                    self.game?.scoreUserChallenging += 1
-                    self.gameStatus.text = (self.game?.userChallenging)! + " ganhou!"
-                    self.game?.roundUser = 1
-                } else {
-                    self.gameStatus.text = "empate!"
-                    if self.game?.roundUser == 0 {
-                        self.game?.roundUser = 1
-                    } else {
-                        self.game?.roundUser = 0
-                    }
-                }
+                checkWinner(powerRequesting: cardUserRequesting.strength, powerChallenging: cardUserChallenging.strength)
                 break
             case AttributeEnum.velocity:
+                checkWinner(powerRequesting: cardUserRequesting.speed, powerChallenging: cardUserChallenging.speed)
                 break
             case AttributeEnum.hability:
+                checkWinner(powerRequesting: cardUserRequesting.ability, powerChallenging: cardUserChallenging.ability)
                 break
             case AttributeEnum.equipament:
+                checkWinner(powerRequesting: cardUserRequesting.equipment, powerChallenging: cardUserChallenging.equipment)
                 break
             case AttributeEnum.intelligence:
+                checkWinner(powerRequesting: cardUserRequesting.intelligence, powerChallenging: cardUserChallenging.intelligence)
                 break
         }
         
         self.game?.opponentHasPlayed = true
+        self.hideAllAttributes(hidden: true)
         self.updateGame()
         
         let when = DispatchTime.now() + 3
@@ -279,12 +276,98 @@ class GameViewController: UIViewController {
         }
     }
     
+    func checkWinner(powerRequesting: Int, powerChallenging: Int) {
+        if powerRequesting > powerChallenging {
+            self.game?.scoreUserRequesting += 1
+            self.gameStatus.text = (self.game?.userRequesting)! + " ganhou!"
+            self.game?.roundUser = 0
+        } else if powerRequesting < powerChallenging {
+            self.game?.scoreUserChallenging += 1
+            self.gameStatus.text = (self.game?.userChallenging)! + " ganhou!"
+            self.game?.roundUser = 1
+        } else {
+            self.gameStatus.text = "empate!"
+            if self.game?.roundUser == 0 {
+                self.game?.roundUser = 1
+            } else {
+                self.game?.roundUser = 0
+            }
+        }
+        checkEndGame(game: self.game!)
+    }
+    
+    func checkEndGame(game: Game) -> Bool {
+        let maxRounds = game.deckUserChallenging.count
+        var isEndGame = false
+        var isRequesting = false
+        
+        if self.game?.userRequesting == self.appDelegate.user?.displayName {
+            isRequesting = true
+        }
+        
+        if(game.scoreUserRequesting >= (maxRounds / 2) + 1) {
+            isEndGame = true
+            if(isRequesting) {
+                showEndGame(win: true)
+            } else {
+                showEndGame(win: false)
+            }
+        } else if (game.scoreUserChallenging >= (maxRounds / 2) + 1) {
+            isEndGame = true
+            if(!isRequesting) {
+                showEndGame(win: true)
+            } else {
+                showEndGame(win: false)
+            }
+
+        } else if (game.round >= maxRounds) {
+            isEndGame = true
+            showEndGame()
+        }
+        
+        return isEndGame
+    }
+    
+    func showEndGame(win: Bool? = nil) {
+        var title = "Derrota"
+        if win == nil{
+            title = "Empate"
+        } else if win! {
+            title = "Vitoria"
+        }
+        let alert = UIAlertController(title: title,
+                                      message: "",
+                                      preferredStyle: .alert)
+        
+        let okAction = UIAlertAction(title: "Ok", style: .default) { _ in
+            self.exitGame()
+            self.performSegue(withIdentifier: "detailToListSegue", sender: self)
+        }
+        
+        alert.addAction(okAction)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     func hideAllAttributes(hidden: Bool) {
         self.strengthBtn.isHidden = hidden
         self.velocityBtn.isHidden = hidden
         self.habilityBtn.isHidden = hidden
         self.equipamentBtn.isHidden = hidden
         self.intelligenceBtn.isHidden = hidden
+    }
+    
+    func exitGame() {
+        if self.game != nil {
+            if self.game?.userRequesting == self.appDelegate.user?.displayName {
+                self.gamesDb.child(self.game?.id as! String).removeValue()
+            } else {
+                self.game?.userChallenging = ""
+                self.game?.deckUserRequesting = []
+                self.game?.deckUserChallenging = []
+                self.updateGame()
+            }
+        }
     }
     
     /*

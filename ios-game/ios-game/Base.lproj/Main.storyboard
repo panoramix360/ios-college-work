@@ -270,6 +270,7 @@
                         <outlet property="scoreUserRequesting" destination="fdS-Gg-07w" id="IQ1-bx-6vl"/>
                         <outlet property="strengthBtn" destination="TqZ-a3-pUH" id="HqK-yw-pRC"/>
                         <outlet property="velocityBtn" destination="guA-rH-yqT" id="152-qI-au8"/>
+                        <segue destination="dJv-aD-LJg" kind="show" identifier="detailToListSegue" id="4L1-Fx-das"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OLM-89-Nev" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -295,4 +296,7 @@
             <point key="canvasLocation" x="989.60000000000002" y="35.532233883058474"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="4L1-Fx-das"/>
+    </inferredMetricsTieBreakers>
 </document>
